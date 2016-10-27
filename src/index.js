@@ -4,6 +4,6 @@ import StravaBikeServiceWeb from './StravaBikeServiceWeb';
 
 
 ReactDOM.render(
-  <StravaBikeServiceWeb />,
-  document.getElementById('root')
+    <StravaBikeServiceWeb />,
+    document.getElementById('root')
 );
