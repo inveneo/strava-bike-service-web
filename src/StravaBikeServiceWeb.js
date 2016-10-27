@@ -81,32 +81,37 @@ var StravaBikeServiceWeb = React.createClass({
         var athlete;
         if (this.state.token && this.state.token.athlete) {
             athlete = (
-                <dl>
-                    <dt>Name</dt>
-                    <dd>{this.state.token.athlete.firstname} {this.state.token.athlete.lastname}</dd>
-                    <dt>Strava Username</dt>
-                    <dd>{this.state.token.athlete.username}</dd>
-                </dl>
+                <div>
+                    <dl className='dl-horizontal'>
+                        <dt>Name</dt>
+                        <dd>{this.state.token.athlete.firstname} {this.state.token.athlete.lastname}</dd>
+                        <dt>Strava Username</dt>
+                        <dd>{this.state.token.athlete.username}</dd>
+                    </dl>
+                    <StravaData
+                        data={this.state.token}
+                    />
+                </div>
             );
         }
 
         return (
             <div className='row'>
                 <div className='col-sm-8 col-sm-offset-2'>
-
                     <div className='text-center'>
                         <h2>Strava Bike Service Data</h2>
-
-                        <p className='text-center text-muted'>Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
-
-                        {connectWithStrava}
-
-                        {athlete}
-
-                        <Button bsStyle='primary' onClick={this.clearState}>Clear State</Button>
-
                     </div>
+
+                    <p className='text-center text-muted'>Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
+
+                    {connectWithStrava}
+
+                    {athlete}
+
+                    <Button bsStyle='primary' onClick={this.clearState}>Clear State</Button>
+
                 </div>
+
             </div>
         )
     }
