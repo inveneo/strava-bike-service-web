@@ -74,8 +74,15 @@ var StravaBikeServiceWeb = React.createClass({
     render() {
         // if there's no code, show the connect to strava button
         var connectWithStrava;
+        var debug;
         if (!this.state.token) {
             connectWithStrava = (<StravaLogin/>);
+        } else {
+            debug = (
+                <p className='text-center'>
+                    <Button bsStyle='primary' onClick={this.clearState}>Clear State</Button>
+                </p>
+            );
         }
 
         var athlete;
@@ -104,11 +111,13 @@ var StravaBikeServiceWeb = React.createClass({
 
                     <p className='text-center text-muted'>Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
 
-                    {connectWithStrava}
+                    <p className='text-center'>
+                        {connectWithStrava}
+                    </p>
 
                     {athlete}
 
-                    <Button bsStyle='primary' onClick={this.clearState}>Clear State</Button>
+                    {debug}
 
                 </div>
 
