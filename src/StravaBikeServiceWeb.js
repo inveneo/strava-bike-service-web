@@ -53,7 +53,7 @@ var StravaBikeServiceWeb = React.createClass({
     getAccessCode(code) {
         // get access code from temp code
         var self = this;
-        var server = process.env.NODE_ENV ? 'https://clark-server.everylayer.io' : 'http://127.0.0.1:3000';
+        var server = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:3000' : 'https://clark-server.everylayer.io';
         $.ajax({
             type: 'post',
             url: server + '/v1/code',
@@ -80,7 +80,7 @@ var StravaBikeServiceWeb = React.createClass({
             bikes: this.state.stravaData.athlete.bikes
         }
 
-        var server = process.env.NODE_ENV ? 'https://clark-server.everylayer.io' : 'http://127.0.0.1:3000';
+        var server = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:3000' : 'https://clark-server.everylayer.io';
         $.ajax({
             type: 'post',
             url: server + '/v1/ridetimes',
