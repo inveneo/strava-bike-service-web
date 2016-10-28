@@ -1,12 +1,26 @@
 import React from 'react';
 
 var Help = React.createClass({
+    getInitialState() {
+        return {
+            open: false
+        }
+    },
+    handleClick() {
+        console.log('click');
+        this.setState({open: !this.state.open});
+    },
     render() {
+        var action = (<span>View</span>);
+        if (this.state.open) {
+            action = (<span>Hide</span>);
+        }
+
         return (
             <div>
                 <p className='text-center'>
-                    <a data-toggle='collapse' href='#helpCollapse' aria-expanded='false' aria-controls='helpCollapse'>
-                        View Instructions <span className='glyphicon glyphicon-question-sign'></span>
+                    <a data-toggle='collapse' href='#helpCollapse' onClick={()=>this.handleClick()} aria-expanded='false' aria-controls='helpCollapse'>
+                        {action} Instructions <span className='glyphicon glyphicon-question-sign'></span>
                     </a>
                 </p>
 
@@ -18,6 +32,8 @@ var Help = React.createClass({
                                 <li>The purpose of this application is to calculate the amount
                                 of time you've ridden each of your bikes since its last service.
                                 </li>
+                                <li>To achieve this, it subtotals ride times, by bike, using your own ride data from Strava.</li>
+                                <li>It was originally designed to track when to service suspension parts on mountain bikes, and was inspired by <a href='http://www.pedalwrencher.com/'>Pedal Wrencher</a>.</li>
                             </ul>
 
                             <p className='lead'>Setup</p>

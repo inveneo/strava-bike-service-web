@@ -46,7 +46,6 @@ var StravaBikeServiceWeb = React.createClass({
         var params = getQueryParams(window.location.search);
         if (params && params.code) {
             // this is a temporary authorization code, get the full code now
-            console.log('strava temporary code: ',params.code);
             this.getAccessCode(params.code);
         }
     },
@@ -88,7 +87,6 @@ var StravaBikeServiceWeb = React.createClass({
             headers: { },
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
-                console.log('got ride times: ', data);
                 self.setState({rides: data})
             },
             error: function(err) {
