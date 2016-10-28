@@ -85,37 +85,43 @@ var StravaBikeServiceWeb = React.createClass({
             );
         }
 
-        var athlete;
+        var moreInfo;
+        var data;
         if (this.state.token && this.state.token.athlete) {
-            athlete = (
-                <div>
-                    <dl className='dl-horizontal'>
-                        <dt>Name</dt>
-                        <dd>{this.state.token.athlete.firstname} {this.state.token.athlete.lastname}</dd>
-                        <dt>Strava Username</dt>
-                        <dd>{this.state.token.athlete.username}</dd>
-                    </dl>
-                    <StravaData
-                        data={this.state.token}
-                    />
-                </div>
+            moreInfo = (
+                <span>for {this.state.token.athlete.username}</span>
+            )
+            data = (
+                <StravaData
+                    data={this.state.token}
+                />
             );
         }
+
+        var athlete = (
+            <div>
+                <p className='text-center'>
+                    <h2>Strava Bike Service Data {moreInfo}</h2>
+                    <p className='text-center text-muted'>
+                        Subtotal ride times for each mountain bike.
+                    </p>
+                    <p className='text-center text-muted'>
+                        If any bike has more than 30 hours of ride time, its time to for service!
+                    </p>
+                </p>
+                {data}
+            </div>
+        );
 
         return (
             <div className='row'>
                 <div className='col-sm-8 col-sm-offset-2'>
-                    <div className='text-center'>
-                        <h2>Strava Bike Service Data</h2>
-                    </div>
 
-                    <p className='text-center text-muted'>Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
+                    {athlete}
 
                     <p className='text-center'>
                         {connectWithStrava}
                     </p>
-
-                    {athlete}
 
                     {debug}
 

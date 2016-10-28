@@ -26,7 +26,6 @@ var StravaData = React.createClass({
             type: 'post',
             url: 'http://127.0.0.1:3000/v1/times',
             data: JSON.stringify(data),
-            // headers: { Authorization: self.props.data.access_token },
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
                 console.log('data: ',data);
@@ -41,11 +40,6 @@ var StravaData = React.createClass({
         if (this.props.data && this.props.data.access_token) {
             this.getStravaData();
         }
-        // seconds
-        // this.setState({serviceInterval: this.props.serviceInterval * 60 * 60}, function() {
-        //     console.log('component mounted', this.state.serviceInterval);
-        //     this.getStravaData();
-        // });
     },
     render() {
         // var bikes;
