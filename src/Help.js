@@ -14,10 +14,11 @@ var Help = React.createClass({
                     <div className='panel panel-default'>
                         <div className='panel-body'>
                             <p className='lead'>Overview</p>
-                            <p>
-                                The purpose of this application is to calculate the amount
+                            <ul>
+                                <li>The purpose of this application is to calculate the amount
                                 of time you've ridden each of your bikes since its last service.
-                            </p>
+                                </li>
+                            </ul>
 
                             <p className='lead'>Setup</p>
                             <ul>
@@ -31,7 +32,8 @@ var Help = React.createClass({
                             <ul>
                                 <li>Currently, this date can be the <em>only</em> item in the Notes field.</li>
                                 <li>This application only looks at mountain bikes.  Suck it, roadies!</li>
-                                <li>This application is read only and does not write to your Strava account or store any of your private data.</li>
+                                <li>This application is read-only, i.e. it does not write to your Strava account or store any of your private data.</li>
+                                <li>This application is experimental, and provided "as-is".  Suggestions may be sent by <a href='mailto&#58;&#99;%6Ca&#114;k&#114;itch&#105;e&#64;%79&#37;61hoo&#46;com'>email</a>.</li>
                             </ul>
                         </div>
                     </div>
