@@ -67,6 +67,7 @@ var StravaBikeServiceWeb = React.createClass({
             },
             error: function(err) {
                 console.log(err);
+                self.setState({error: err.responseText});
             }
         });
     },
@@ -90,7 +91,7 @@ var StravaBikeServiceWeb = React.createClass({
                 self.setState({rides: data})
             },
             error: function(err) {
-                console.log('setting error: ', JSON.parse(err.responseText));
+                console.log(err);
                 self.setState({error: err.responseText});
             }
         });
@@ -155,7 +156,6 @@ var StravaBikeServiceWeb = React.createClass({
         var error;
         if (this.state.error && this.state.error.length) {
             var e = JSON.parse(this.state.error);
-            console.log(e);
             error = (
                 <div className='alert alert-danger' role='alert'>
                     <span className='glyphicon glyphicon-exclamation-sign glyphicon-padding' aria-hidden='true'></span>
