@@ -1,15 +1,19 @@
 import React from 'react';
 
 import $ from 'jquery';
+import ServiceInterval from './ServiceInterval';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'bootstrap/dist/js/bootstrap.js';
+import '../public/custom.css';
+import PoweredByStrava from '../public/img/api_logo_pwrdBy_strava_horiz_light.png';
 
 import { Button } from 'react-bootstrap';
 
 import StravaLogin from './StravaLogin';
-import StravaData from './StravaData';
+import ServiceData from './ServiceData';
+import Help from './Help';
 
 function getQueryParams(qs) {
     qs = qs.split('+').join(' ');
@@ -31,8 +35,11 @@ var StravaBikeServiceWeb = React.createClass({
     },
     getEmptyData() {
         return {
-            code: null,
-            token: null
+            code: null, // temporary access code, used to get full access_code
+            stravaData: null, // includes access_token plus athlete data
+            rides: [], // bikes with ride time since last service pre-calculated
+            serviceInterval: 30, // default, in hours
+            error: null
         }
     },
     componentDidMount() {
@@ -45,7 +52,7 @@ var StravaBikeServiceWeb = React.createClass({
     },
     getAccessCode(code) {
         var self = this;
-        console.log('get access code from temp code: ',code);
+        // get access code from temp code
         $.ajax({
             type: 'post',
             url: 'http://127.0.0.1:3000/v1/code',
@@ -53,29 +60,53 @@ var StravaBikeServiceWeb = React.createClass({
             headers: { },
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
-                console.log('athlete data: ',data);
-                self.setState({
-                    token: data
-                })
+                // console.log('got back athlete: ', data.athlete.username);
+                self.setState({ stravaData: data }, function() {
+                    self.getRides();
+                });
             },
             error: function(err) {
                 console.log(err);
             }
         });
     },
-    clearState() {
+    getRides() {
         var self = this;
-        console.log('clear state');
-        console.log(this.state);
-        this.setState(this.getEmptyData(), function() {
-            console.log(self.state);
+        // console.log('getRides: ',self.state.stravaData);
+        var data = {
+            accessToken: this.state.stravaData.access_token,
+            athleteId: this.state.stravaData.athlete.id,
+            bikes: this.state.stravaData.athlete.bikes
+        }
+
+        $.ajax({
+            type: 'post',
+            url: 'http://127.0.0.1:3000/v1/ridetimes',
+            data: JSON.stringify(data),
+            headers: { },
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                console.log('got ride times: ', data);
+                self.setState({rides: data})
+            },
+            error: function(err) {
+                console.log('setting error: ', JSON.parse(err.responseText));
+                self.setState({error: err.responseText});
+            }
         });
+    },
+    clearState() {
+        // for debugging, clear state
+        this.setState(this.getEmptyData());
+    },
+    setServiceInterval(value) {
+        this.setState({serviceInterval: value});
     },
     render() {
         // if there's no code, show the connect to strava button
         var connectWithStrava;
         var debug;
-        if (!this.state.token) {
+        if (!this.state.stravaData) {
             connectWithStrava = (<StravaLogin/>);
         } else {
             debug = (
@@ -87,13 +118,24 @@ var StravaBikeServiceWeb = React.createClass({
 
         var moreInfo;
         var data;
-        if (this.state.token && this.state.token.athlete) {
+        var serviceInterval;
+        if (this.state.stravaData && this.state.stravaData.athlete) {
             moreInfo = (
-                <span>for {this.state.token.athlete.username}</span>
+                <span>for {this.state.stravaData.athlete.username}</span>
             )
+        }
+
+        if (this.state.rides && this.state.rides.length) {
+            serviceInterval =(
+                <ServiceInterval
+                    active={this.state.serviceInterval}
+                    onClick={this.setServiceInterval}
+                    />
+                );
             data = (
-                <StravaData
-                    data={this.state.token}
+                <ServiceData
+                    rides={this.state.rides}
+                    serviceInterval={this.state.serviceInterval}
                 />
             );
         }
@@ -105,66 +147,60 @@ var StravaBikeServiceWeb = React.createClass({
                     <p className='text-center text-muted'>
                         Subtotal ride times for each mountain bike.
                     </p>
-                    <p className='text-center text-muted'>
-                        If any bike has more than 30 hours of ride time, its time to for service!
-                    </p>
                 </p>
-                {data}
+
             </div>
         );
 
+        var error;
+        if (this.state.error && this.state.error.length) {
+            var e = JSON.parse(this.state.error);
+            console.log(e);
+            error = (
+                <div className='alert alert-danger' role='alert'>
+                    <span className='glyphicon glyphicon-exclamation-sign glyphicon-padding' aria-hidden='true'></span>
+                    {e.message}
+                </div>
+            )
+        }
+
         return (
-            <div className='row'>
-                <div className='col-sm-8 col-sm-offset-2'>
+            <div>
+                <div className='row app-top'>
+                    <div className='col-xs-8 col-xs-offset-2'>
+                        <div className='well'>
+                            <p className='text-center'>
+                                <h2>
+                                    Bike Service Details {moreInfo}
+                                </h2>
+                                <h4>
+                                    Ride time subtotals, by bike
+                                </h4>
+                                <img src={PoweredByStrava}/>
+                            </p>
+                        </div>
 
-                    {athlete}
+                        <Help/>
 
-                    <p className='text-center'>
-                        {connectWithStrava}
-                    </p>
+                        <p className='text-center'>
+                            {connectWithStrava}
+                        </p>
 
-                    {debug}
+                        {serviceInterval}
+                        {error}
+                        {data}
 
+                    </div>
                 </div>
 
+                <div className='row'>
+                    <div className='col-xs-12'>
+                        {debug}
+                    </div>
+                </div>
             </div>
         )
     }
 });
-
-// class StravaBikeServiceWeb extends Component {
-//     constructor(props) {
-//         console.log('props: ', props);
-//         var params = getQueryParams(window.location.search);
-//         if (params.code) {
-//             // this.setState({code: params.code});
-//             this.state = {
-//                 code: params.code
-//             };
-//         }
-//
-//         super(props);
-//         this.state = {
-//             code: props.code
-//         };
-//     }
-//     render() {
-//         return (
-            // <div className='row'>
-            //     <div className='col-sm-8 col-sm-offset-2'>
-            //
-            //         <div className='text-center'>
-            //             <h2>Strava Bike Service Data</h2>
-            //
-            //             <p className='text-center text-muted'>Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
-            //
-            //             <StravaLogin/>
-            //             <p>Code: {this.state.code}</p>
-            //         </div>
-            //     </div>
-            // </div>
-//         );
-//     }
-// }
 
 export default StravaBikeServiceWeb;
