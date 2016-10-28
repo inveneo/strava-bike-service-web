@@ -20,7 +20,7 @@ var StravaLogin = React.createClass({
         // the result of which should be a token
         var self = this;
         $.ajax({
-            url: 'http://localhost:9000/v1/login',
+            url: 'https://clark-server.everylayer.io/v1/login',
             dataType: 'json',
             data: null,
             cache: false,
