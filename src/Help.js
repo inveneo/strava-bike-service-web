@@ -6,7 +6,7 @@ var Help = React.createClass({
             <div>
                 <p className='text-center'>
                     <a data-toggle='collapse' href='#helpCollapse' aria-expanded='false' aria-controls='helpCollapse'>
-                        View Instructions
+                        View Instructions <span className='glyphicon glyphicon-question-sign'></span>
                     </a>
                 </p>
 

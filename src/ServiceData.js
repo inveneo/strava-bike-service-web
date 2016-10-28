@@ -66,6 +66,8 @@ var ServiceData = React.createClass({
                         </Label>
                     </div>
                 );
+
+                var textLabel = 'text-primary';
                 if (due) {
                     serviceLabel = (
                         <div>
@@ -74,18 +76,13 @@ var ServiceData = React.createClass({
                             </Label>
                         </div>
                     );
+                    textLabel = 'text-danger';
                 }
 
                 return (
                     <li className='list-group-item' key={i}>
+                        <h2 className={textLabel}>{bike.name}</h2>
                         <dl className='dl-horizontal'>
-                            <dt>
-                                Bike
-                            </dt>
-                            <dd>
-                                {bike.name}
-                            </dd>
-
                             <dt>
                                 Service Status
                             </dt>

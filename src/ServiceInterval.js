@@ -32,12 +32,10 @@ var ServiceInterval = React.createClass({
 
         return (
             <div className='text-center'>
-
-                <h4>
-                    Select a service interval, in hours
-                </h4>
-
                 <ul className='pagination'>
+                    <h4>
+                        Select a service interval, in hours
+                    </h4>
                     {items}
                 </ul>
             </div>

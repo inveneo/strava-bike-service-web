@@ -6,6 +6,8 @@ import ServiceInterval from './ServiceInterval';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'bootstrap/dist/js/bootstrap.js';
+import '../public/custom.css';
+import PoweredByStrava from '../public/img/api_logo_pwrdBy_strava_horiz_light.png';
 
 import { Button } from 'react-bootstrap';
 
@@ -116,6 +118,7 @@ var StravaBikeServiceWeb = React.createClass({
 
         var moreInfo;
         var data;
+        var serviceInterval;
         if (this.state.stravaData && this.state.stravaData.athlete) {
             moreInfo = (
                 <span>for {this.state.stravaData.athlete.username}</span>
@@ -123,6 +126,12 @@ var StravaBikeServiceWeb = React.createClass({
         }
 
         if (this.state.rides && this.state.rides.length) {
+            serviceInterval =(
+                <ServiceInterval
+                    active={this.state.serviceInterval}
+                    onClick={this.setServiceInterval}
+                    />
+                );
             data = (
                 <ServiceData
                     rides={this.state.rides}
@@ -149,42 +158,46 @@ var StravaBikeServiceWeb = React.createClass({
             console.log(e);
             error = (
                 <div className='alert alert-danger' role='alert'>
-                    <span className='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
-                    &nbsp;{e.message}
+                    <span className='glyphicon glyphicon-exclamation-sign glyphicon-padding' aria-hidden='true'></span>
+                    {e.message}
                 </div>
             )
         }
 
         return (
-            <div className='row'>
-                <div className='col-sm-8 col-sm-offset-2'>
+            <div>
+                <div className='row app-top'>
+                    <div className='col-xs-8 col-xs-offset-2'>
+                        <div className='well'>
+                            <p className='text-center'>
+                                <h2>
+                                    Bike Service Details {moreInfo}
+                                </h2>
+                                <h4>
+                                    Ride time subtotals, by bike
+                                </h4>
+                                <img src={PoweredByStrava}/>
+                            </p>
+                        </div>
 
-                    <p className='text-center'>
-                        <h2>Strava Bike Service Data {moreInfo}</h2>
-                        <h4>
-                        Subtotal ride times for your mountain bikes
-                        </h4>
-                    </p>
+                        <Help/>
 
-                    <Help/>
+                        <p className='text-center'>
+                            {connectWithStrava}
+                        </p>
 
-                    {<ServiceInterval
-                        active={this.state.serviceInterval}
-                        onClick={this.setServiceInterval}
-                    />}
+                        {serviceInterval}
+                        {error}
+                        {data}
 
-                    <p className='text-center'>
-                        {connectWithStrava}
-                    </p>
-
-                    {error}
-
-                    {data}
-
-                    {debug}
-
+                    </div>
                 </div>
 
+                <div className='row'>
+                    <div className='col-xs-12'>
+                        {debug}
+                    </div>
+                </div>
             </div>
         )
     }
