@@ -19,7 +19,7 @@ var StravaLogin = React.createClass({
         // get the request access URL from the server, send the user to that url,
         // the result of which should be a token
         var self = this;
-        var server = process.env.ENV ? 'https://clark-server.everylayer.io' : 'http://127.0.0.1:3000';
+        var server = process.env.NODE_ENV ? 'https://clark-server.everylayer.io' : 'http://127.0.0.1:3000';
         console.log('requestAccess: ', server);
         $.ajax({
             url: server + '/v1/login',
