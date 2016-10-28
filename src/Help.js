@@ -16,16 +16,15 @@ var Help = React.createClass({
                             <p className='lead'>Overview</p>
                             <p>
                                 The purpose of this application is to calculate the amount
-                                of time you've ridden on each of your mountain bikes since
-                                its last service.  It is important to service your
-                                shocks regularly by changing the oil and replacing dust wipers!
+                                of time you've ridden each of your mountain bikes since
+                                its last service.
                             </p>
 
                             <p className='lead'>Setup</p>
                             <ul>
                                 <li>For each of your bicycles on Strava, put the date of its last service into the Notes field.</li>
                                 <li>The date must be in the format YYYY-MM-DD.</li>
-                                <li>Currently, this date can be the <em>only</em> item in the notes field.</li>
+                                <li>Currently, this date can be the <em>only</em> item in the Notes field.</li>
                                 <li>This application only looks at mountain bikes.  Suck it, roadies!</li>
                             </ul>
                         </div>

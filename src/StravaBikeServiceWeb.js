@@ -113,7 +113,7 @@ var StravaBikeServiceWeb = React.createClass({
         } else {
             debug = (
                 <p className='text-center'>
-                    <Button bsStyle='primary' onClick={this.clearState}>Clear State</Button>
+                    <Button bsStyle='primary' bsSize='xsmall' onClick={this.clearState}>For Debugging: Clear State</Button>
                 </p>
             );
         }

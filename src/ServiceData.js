@@ -24,40 +24,27 @@ var ServiceData = React.createClass({
         }
     },
     render() {
-        // console.log(this.props.rides.length);
-        console.log('using service interval: ',this.props.serviceInterval);
-
         var self = this;
         var bikes;
         if (this.props.rides && this.props.rides.length) {
-
-            // hours to minutes
+            // hours to minutes to seconds
             var serviceInterval = self.props.serviceInterval * 60 * 60;
             bikes = this.props.rides.map(function(bike, i) {
-                console.log(bike);
-
                 var lastServiceDate = new Date(bike.lastService * 1000);
-                console.log('bike.lastServiceDate: ',lastServiceDate);
 
                 // compute how much time is left
                 var left = serviceInterval - (bike.minutes / 60) * 60;
-                // console.log('serviceInterval: ',serviceInterval);
-                // console.log('bike.minutes: ',bike.minutes);
-                // console.log('Left: ', left);
 
                 // boolean if service is due or not
                 var due = (bike.minutes >= serviceInterval) ? true : false;
 
                 // weave in our info
                 bike['due'] = due,
-                // bike['lastService'] = lastServiceDate;
                 bike['lastServiceFormatted'] = lastServiceDate.format('MMM D YYYY');
                 bike['timeSince'] = self.secondsToHms(bike.minutes);
 
                 var l = (left > 0 ? self.secondsToHms(left) : 'Overdue for service');
                 bike['timeUntil'] = l;
-
-                // console.log('bike: ',bike);
 
                 var serviceLabel = (
                     <div>
