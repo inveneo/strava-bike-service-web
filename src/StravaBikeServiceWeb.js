@@ -55,7 +55,7 @@ var StravaBikeServiceWeb = React.createClass({
         // get access code from temp code
         $.ajax({
             type: 'post',
-            url: 'http://127.0.0.1:3000/v1/code',
+            url: 'http://127.0.0.1:9000/v1/code',
             data: JSON.stringify({code: code}),
             headers: { },
             contentType: 'application/json; charset=utf-8',
@@ -81,7 +81,7 @@ var StravaBikeServiceWeb = React.createClass({
 
         $.ajax({
             type: 'post',
-            url: 'http://127.0.0.1:3000/v1/ridetimes',
+            url: 'http://127.0.0.1:9000/v1/ridetimes',
             data: JSON.stringify(data),
             headers: { },
             contentType: 'application/json; charset=utf-8',
