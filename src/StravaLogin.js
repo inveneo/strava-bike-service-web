@@ -19,14 +19,15 @@ var StravaLogin = React.createClass({
         // get the request access URL from the server, send the user to that url,
         // the result of which should be a token
         var self = this;
+        var server = process.env.ENV ? 'https://clark-server.everylayer.io' : 'http://127.0.0.1:3000';
+        console.log('requestAccess: ', server);
         $.ajax({
-            url: 'https://clark-server.everylayer.io/v1/login',
+            url: server + '/v1/login',
             dataType: 'json',
             data: null,
             cache: false,
             headers: { },
             success: function(data) {
-                console.log('success: ', data);
                 // send the user on to authenticate this app
                 window.location = data.url;
             },
@@ -39,10 +40,7 @@ var StravaLogin = React.createClass({
         return (
             <div>
                 <a href='#' onClick={this.requestAccess}>
-                    <img
-                        src='/img/btn_strava_connectwith_orange.png'
-                        alt='Connect with Strava'
-                    />
+                    <img src='/img/btn_strava_connectwith_orange.png' alt='Connect with Strava' className='img-responsive center-block' />
                 </a>
             </div>
         );

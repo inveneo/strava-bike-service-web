@@ -51,16 +51,16 @@ var StravaBikeServiceWeb = React.createClass({
         }
     },
     getAccessCode(code) {
-        var self = this;
         // get access code from temp code
+        var self = this;
+        var server = process.env.ENV ? 'https://clark-server.everylayer.io' : 'http://127.0.0.1:3000';
         $.ajax({
             type: 'post',
-            url: 'https://clark-server.everylayer.io/v1/code',
+            url: server + '/v1/code',
             data: JSON.stringify({code: code}),
             headers: { },
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
-                // console.log('got back athlete: ', data.athlete.username);
                 self.setState({ stravaData: data }, function() {
                     self.getRides();
                 });
@@ -80,9 +80,10 @@ var StravaBikeServiceWeb = React.createClass({
             bikes: this.state.stravaData.athlete.bikes
         }
 
+        var server = process.env.ENV ? 'https://clark-server.everylayer.io' : 'http://127.0.0.1:3000';
         $.ajax({
             type: 'post',
-            url: 'https://clark-server.everylayer.io/v1/ridetimes',
+            url: server + '/v1/ridetimes',
             data: JSON.stringify(data),
             headers: { },
             contentType: 'application/json; charset=utf-8',
@@ -169,22 +170,19 @@ var StravaBikeServiceWeb = React.createClass({
                 <div className='row app-top'>
                     <div className='col-xs-8 col-xs-offset-2'>
                         <div className='well'>
-                            <p className='text-center'>
-                                <h2>
-                                    Bike Service Details {moreInfo}
-                                </h2>
-                                <h4>
-                                    Ride time subtotals, by bike
-                                </h4>
-                                <img src={PoweredByStrava}/>
-                            </p>
+                            <h2 className='text-center'>
+                                Bike Service Details {moreInfo}
+                            </h2>
+                            <h4 className='text-center'>
+                                Ride time subtotals, by bike
+                            </h4>
+                            <img className='img-responsive center-block' src={PoweredByStrava}/>
+
                         </div>
 
                         <Help/>
 
-                        <p className='text-center'>
-                            {connectWithStrava}
-                        </p>
+                        {connectWithStrava}
 
                         {serviceInterval}
                         {error}
