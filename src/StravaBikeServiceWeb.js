@@ -72,7 +72,7 @@ var StravaBikeServiceWeb = React.createClass({
     },
     getRides() {
         var self = this;
-        // console.log('getRides: ',self.state.stravaData);
+
         var data = {
             accessToken: this.state.stravaData.access_token,
             athleteId: this.state.stravaData.athlete.id,
@@ -87,6 +87,7 @@ var StravaBikeServiceWeb = React.createClass({
             headers: { },
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
+                console.log('rides: ',data);
                 self.setState({rides: data})
             },
             error: function(err) {

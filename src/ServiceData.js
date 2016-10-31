@@ -48,9 +48,10 @@ var ServiceData = React.createClass({
 
                 var serviceLabel = (
                     <div>
-                        <Label bsStyle='success'>
+                        <Label bsStyle='success glyphicon-padding'>
                             <span className='glyphicon glyphicon-ok'></span>
                         </Label>
+                        No service required
                     </div>
                 );
 
@@ -58,9 +59,10 @@ var ServiceData = React.createClass({
                 if (due) {
                     serviceLabel = (
                         <div>
-                            <Label bsStyle='danger'>
+                            <Label bsStyle='danger glyphicon-padding'>
                                 <span className='glyphicon glyphicon-exclamation-sign'></span>
                             </Label>
+                            Due for service
                         </div>
                     );
                     textLabel = 'text-danger';
@@ -75,6 +77,13 @@ var ServiceData = React.createClass({
                             </dt>
                             <dd>
                                 {serviceLabel}
+                            </dd>
+
+                            <dt>
+                                Last Ride
+                            </dt>
+                            <dd>
+                                {bike.lastRide}
                             </dd>
 
                             <dt>

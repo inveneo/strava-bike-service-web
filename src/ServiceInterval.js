@@ -15,7 +15,7 @@ var ServiceInterval = React.createClass({
     render() {
         var self = this;
 
-        var values = [5,10,20,30,45,60,75,100,150,200];
+        var values = [20,30,45,60,75];
         var items = values.map(function(v, i) {
 
             var active;
@@ -32,10 +32,10 @@ var ServiceInterval = React.createClass({
 
         return (
             <div className='text-center'>
+                <h4>
+                    Select a service interval, in hours
+                </h4>
                 <ul className='pagination'>
-                    <h4>
-                        Select a service interval, in hours
-                    </h4>
                     {items}
                 </ul>
             </div>
