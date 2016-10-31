@@ -7,7 +7,6 @@ var Help = React.createClass({
         }
     },
     handleClick() {
-        console.log('click');
         this.setState({open: !this.state.open});
     },
     render() {
