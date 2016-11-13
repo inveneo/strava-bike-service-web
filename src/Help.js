@@ -10,7 +10,7 @@ var Help = React.createClass({
         this.setState({open: !this.state.open});
     },
     render() {
-        var action = (<span>View</span>);
+        var action = (<span>Show</span>);
         if (this.state.open) {
             action = (<span>Hide</span>);
         }

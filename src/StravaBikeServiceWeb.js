@@ -112,7 +112,7 @@ var StravaBikeServiceWeb = React.createClass({
         } else {
             debug = (
                 <p className='text-center'>
-                    <Button bsStyle='primary' bsSize='xsmall' onClick={this.clearState}>For Debugging: Clear State</Button>
+                    <Button bsStyle='primary' onClick={this.clearState}>Start Over</Button>
                 </p>
             );
         }
@@ -170,10 +170,10 @@ var StravaBikeServiceWeb = React.createClass({
                     <div className='col-xs-8 col-xs-offset-2'>
                         <div className='well'>
                             <h2 className='text-center'>
-                                Bike Service Details {moreInfo}
+                                MTB Service Details {moreInfo}
                             </h2>
                             <h4 className='text-center'>
-                                Ride time subtotals, by bike
+                                Your rides times, subtotaled by mountain bike
                             </h4>
                             <img className='img-responsive center-block' src={PoweredByStrava}/>
 
@@ -182,7 +182,6 @@ var StravaBikeServiceWeb = React.createClass({
                         <Help/>
 
                         {connectWithStrava}
-
                         {serviceInterval}
                         {error}
                         {data}
