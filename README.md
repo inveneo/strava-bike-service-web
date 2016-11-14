@@ -23,5 +23,7 @@ location / {
 ```
 
 ### Demo
-* https://sbs.everylayer.io
+* Installed [here](https://sbs.everylayer.io)
+* Example:
+
 ![image](http://g.recordit.co/EZECP0qG33.gif)
