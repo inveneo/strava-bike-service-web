@@ -2,7 +2,7 @@
 
 # Strava Bike Service client
 
-This application is a simple web front end for my Strava Bike Service server, built with React using [create-react-app](https://github.com/facebookincubator/create-react-app).
+This application is a simple web front end for my [Strava Bike Service server](https://github.com/clarkritchie/strava-bike-service-server), built with React using [create-react-app](https://github.com/facebookincubator/create-react-app).
 
 Its purpose is to subtotal rides times, by bike, using ride data from [Strava](http://www.strava.com).  Subtotals are used to determine whether or not service is required, e.g. every 30 hours, every 50 hours, etc.
 
