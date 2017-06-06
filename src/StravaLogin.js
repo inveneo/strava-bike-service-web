@@ -1,5 +1,4 @@
 import React from 'react';
-import strava from 'strava-v3';
 import $ from 'jquery';
 import _ from 'underscore';
 
@@ -18,9 +17,7 @@ var StravaLogin = React.createClass({
     requestAccess(url) {
         // get the request access URL from the server, send the user to that url,
         // the result of which should be a token
-        var self = this;
         var server = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:3000' : 'https://sbs-server.everylayer.io';
-        console.log('requestAccess: ', server);
         $.ajax({
             url: server + '/v1/login',
             dataType: 'json',

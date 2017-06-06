@@ -1,6 +1,5 @@
 import React from 'react';
 import { Label } from 'react-bootstrap';
-import $ from 'jquery';
 import _ from 'underscore';
 import dateFormat from 'date-format-lite';
 
@@ -39,19 +38,22 @@ var ServiceData = React.createClass({
                 var due = (bike.minutes >= serviceInterval) ? true : false;
 
                 // weave in our info
-                bike['due'] = due,
-                bike['lastServiceFormatted'] = lastServiceDate.format('MMM D YYYY');
-                bike['timeSince'] = self.secondsToHms(bike.minutes);
+                bike.due = due;
+                bike.lastServiceFormatted = lastServiceDate.format('MMM D YYYY');
+                bike.lastRideDateFormatted = lastServiceDate.format('MMM D YYYY');
+                bike.timeSince = self.secondsToHms(bike.minutes);
 
                 var l = (left > 0 ? self.secondsToHms(left) : 'Overdue for service');
                 bike['timeUntil'] = l;
 
                 var serviceLabel = (
                     <div>
-                        <Label bsStyle='success glyphicon-padding'>
+                        <Label bsStyle='success'>
                             <span className='glyphicon glyphicon-ok'></span>
                         </Label>
-                        No service required
+                        <span className='glyphicon-padding'>
+                            No service required
+                        </span>
                     </div>
                 );
 
@@ -59,10 +61,12 @@ var ServiceData = React.createClass({
                 if (due) {
                     serviceLabel = (
                         <div>
-                            <Label bsStyle='danger glyphicon-padding'>
+                            <Label bsStyle='danger'>
                                 <span className='glyphicon glyphicon-exclamation-sign'></span>
                             </Label>
-                            Due for service
+                            <span className='glyphicon-padding'>
+                                Service is required
+                            </span>
                         </div>
                     );
                     textLabel = 'text-danger';
@@ -77,6 +81,13 @@ var ServiceData = React.createClass({
                             </dt>
                             <dd>
                                 {serviceLabel}
+                            </dd>
+
+                            <dt>
+                                Last Ride Date
+                            </dt>
+                            <dd>
+                                {bike.lastRideDateFormatted}
                             </dd>
 
                             <dt>

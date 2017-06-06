@@ -39,7 +39,8 @@ var StravaBikeServiceWeb = React.createClass({
             stravaData: null, // includes access_token plus athlete data
             rides: [], // bikes with ride time since last service pre-calculated
             serviceInterval: 30, // default, in hours
-            error: null
+            error: null,
+            loading: false
         }
     },
     componentDidMount() {
@@ -79,21 +80,22 @@ var StravaBikeServiceWeb = React.createClass({
             bikes: this.state.stravaData.athlete.bikes
         }
 
-        var server = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:3000' : 'https://sbs-server.everylayer.io';
-        $.ajax({
-            type: 'post',
-            url: server + '/v1/ridetimes',
-            data: JSON.stringify(data),
-            headers: { },
-            contentType: 'application/json; charset=utf-8',
-            success: function(data) {
-                console.log('rides: ',data);
-                self.setState({rides: data})
-            },
-            error: function(err) {
-                console.log(err);
-                self.setState({error: err.responseText});
-            }
+        this.setState({loading: true}, () => {
+            var server = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:3000' : 'https://sbs-server.everylayer.io';
+            $.ajax({
+                type: 'post',
+                url: server + '/v1/ridetimes',
+                data: JSON.stringify(data),
+                headers: { },
+                contentType: 'application/json; charset=utf-8',
+                success: function(data) {
+                    self.setState({rides: data, loading: false})
+                },
+                error: function(err) {
+                    self.setState({error: err.responseText, loading: false});
+                }
+            });
+
         });
     },
     clearState() {
@@ -126,40 +128,36 @@ var StravaBikeServiceWeb = React.createClass({
             )
         }
 
-        if (this.state.rides && this.state.rides.length) {
-            serviceInterval =(
-                <ServiceInterval
-                    active={this.state.serviceInterval}
-                    onClick={this.setServiceInterval}
+        if (this.state.loading) {
+            serviceInterval = (
+                <div className='loader'>Loading Strava data...</div>
+            );
+        } else {
+            if (this.state.rides && this.state.rides.length) {
+                serviceInterval =(
+                    <ServiceInterval
+                        active={this.state.serviceInterval}
+                        onClick={this.setServiceInterval}
                     />
                 );
-            data = (
-                <ServiceData
-                    rides={this.state.rides}
-                    serviceInterval={this.state.serviceInterval}
-                />
-            );
+                data = (
+                    <ServiceData
+                        rides={this.state.rides}
+                        serviceInterval={this.state.serviceInterval}
+                    />
+                );
+            }
         }
-
-        var athlete = (
-            <div>
-                <p className='text-center'>
-                    <h2>Strava Bike Service Data {moreInfo}</h2>
-                    <p className='text-center text-muted'>
-                        Subtotal ride times for each mountain bike.
-                    </p>
-                </p>
-
-            </div>
-        );
 
         var error;
         if (this.state.error && this.state.error.length) {
             var e = JSON.parse(this.state.error);
             error = (
                 <div className='alert alert-danger' role='alert'>
-                    <span className='glyphicon glyphicon-exclamation-sign glyphicon-padding' aria-hidden='true'></span>
-                    {e.message}
+                    <span className='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+                    <span className='glyphicon-padding'>
+                        {e.message}
+                    </span>
                 </div>
             )
         }
@@ -175,7 +173,7 @@ var StravaBikeServiceWeb = React.createClass({
                             <h4 className='text-center'>
                                 Your rides times, subtotaled by mountain bike
                             </h4>
-                            <img className='img-responsive center-block' src={PoweredByStrava}/>
+                            <img role='presentation' className='img-responsive center-block' src={PoweredByStrava}/>
 
                         </div>
 
@@ -185,7 +183,6 @@ var StravaBikeServiceWeb = React.createClass({
                         {serviceInterval}
                         {error}
                         {data}
-
                     </div>
                 </div>
 

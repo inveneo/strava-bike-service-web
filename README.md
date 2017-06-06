@@ -21,3 +21,6 @@ location / {
     try_files $uri /index.html;
 }
 ```
+
+### Demo
+* I have this app (+server) [installed here](https://sbs.everylayer.io) for testing, development.  It may work, or it may not!
