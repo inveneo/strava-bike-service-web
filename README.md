@@ -23,7 +23,6 @@ location / {
 ```
 
 ### Demo
-* Installed [here](https://sbs.everylayer.io)
-* Example:
+* I have this app (+server) [installed here](https://sbs.everylayer.io) for testing, development.  It may work, or it may not!
 
 ![image](http://g.recordit.co/EZECP0qG33.gif)
