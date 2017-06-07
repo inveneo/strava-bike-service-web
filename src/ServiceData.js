@@ -1,7 +1,7 @@
 import React from 'react';
 import { Label } from 'react-bootstrap';
 import _ from 'underscore';
-import dateFormat from 'date-format-lite';
+import moment from 'moment';
 
 var ServiceData = React.createClass({
     getInitialState() {
@@ -29,8 +29,6 @@ var ServiceData = React.createClass({
             // hours to minutes to seconds
             var serviceInterval = self.props.serviceInterval * 60 * 60;
             bikes = this.props.rides.map(function(bike, i) {
-                var lastServiceDate = new Date(bike.lastService * 1000);
-
                 // compute how much time is left
                 var left = serviceInterval - (bike.minutes / 60) * 60;
 
@@ -39,8 +37,9 @@ var ServiceData = React.createClass({
 
                 // weave in our info
                 bike.due = due;
-                bike.lastServiceFormatted = lastServiceDate.format('MMM D YYYY');
-                bike.lastRideDateFormatted = lastServiceDate.format('MMM D YYYY');
+                bike.lastServiceFormatted = moment(bike.lastService * 1000).format('LL');
+                bike.lastRideDateFormatted = moment(bike.lastRideDate).format('LLL');
+
                 bike.timeSince = self.secondsToHms(bike.minutes);
 
                 var l = (left > 0 ? self.secondsToHms(left) : 'Overdue for service');
