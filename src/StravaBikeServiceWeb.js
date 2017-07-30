@@ -37,6 +37,7 @@ var StravaBikeServiceWeb = React.createClass({
         return {
             code: null, // temporary access code, used to get full access_code
             stravaData: null, // includes access_token plus athlete data
+            athlete: null, // detailed athelete info, used to be returned with the OAuth token exchange
             rides: [], // bikes with ride time since last service pre-calculated
             serviceInterval: 30, // default, in hours
             error: null,
@@ -61,8 +62,9 @@ var StravaBikeServiceWeb = React.createClass({
             headers: { },
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
-                self.setState({ stravaData: data }, function() {
-                    self.getRides();
+                self.setState({ stravaData: data }, () => {
+                    // fetch detailed athelete info, which includes bikes and whatnot
+                    self.getAthlete();
                 });
             },
             error: function(err) {
@@ -71,13 +73,38 @@ var StravaBikeServiceWeb = React.createClass({
             }
         });
     },
+    getAthlete() {
+        var self = this;
+
+        this.setState({loading: true}, () => {
+            var server = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:3000' : 'https://sbs-server.everylayer.io';
+            $.ajax({
+                type: 'get',
+                url: server + '/v1/athlete/'+ this.state.stravaData.athlete.id,
+                headers: { },
+                contentType: 'application/json; charset=utf-8',
+                success: function(athlete) {
+                    self.setState({
+                        athlete: athlete,
+                        loading: false
+                    }, () => {
+                        // now fetch ride detail
+                        self.getRides();
+                    })
+                },
+                error: function(err) {
+                    self.setState({error: err.responseText, loading: false});
+                }
+            });
+
+        });
+    },
     getRides() {
         var self = this;
 
         var data = {
-            accessToken: this.state.stravaData.access_token,
-            athleteId: this.state.stravaData.athlete.id,
-            bikes: this.state.stravaData.athlete.bikes
+            athleteId: this.state.athlete.id,
+            bikes: this.state.athlete.bikes
         }
 
         this.setState({loading: true}, () => {
@@ -122,9 +149,9 @@ var StravaBikeServiceWeb = React.createClass({
         var moreInfo;
         var data;
         var serviceInterval;
-        if (this.state.stravaData && this.state.stravaData.athlete) {
+        if (this.state.stravaData && this.state.athlete) {
             moreInfo = (
-                <span>for {this.state.stravaData.athlete.username}</span>
+                <span>for {this.state.athlete.username}</span>
             )
         }
 
