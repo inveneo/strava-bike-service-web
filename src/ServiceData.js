@@ -28,7 +28,7 @@ var ServiceData = React.createClass({
         if (this.props.rides && this.props.rides.length) {
             // hours to minutes to seconds
             var serviceInterval = self.props.serviceInterval * 60 * 60;
-            bikes = this.props.rides.map(function(bike, i) {
+            bikes = this.props.rides.map((bike, i) => {
                 // compute how much time is left
                 var left = serviceInterval - (bike.minutes / 60) * 60;
 
@@ -93,7 +93,7 @@ var ServiceData = React.createClass({
                                 Last Ride
                             </dt>
                             <dd>
-                                {bike.lastRide}
+                                <a href={bike.lastRideUrl}>{bike.lastRide}</a>
                             </dd>
 
                             <dt>
