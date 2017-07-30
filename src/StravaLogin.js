@@ -5,7 +5,7 @@ import _ from 'underscore';
 var StravaLogin = React.createClass({
     getInitialState() {
         return {
-
+            error: false
         }
     },
     getDefaultProps() {
@@ -29,18 +29,30 @@ var StravaLogin = React.createClass({
                 window.location = data.url;
             },
             error: function(err) {
-                console.log('there was a problem getting strava redirect url: ',err);
+                // the server component is not running
+                self.setState({error: true});
             }
         });
     },
     render() {
-        return (
-            <div>
-                <a href='#' onClick={this.requestAccess}>
-                    <img src='/img/btn_strava_connectwith_orange.png' alt='Connect with Strava' className='img-responsive center-block' />
-                </a>
-            </div>
-        );
+        if (this.state.error) {
+            return (
+                <div className='alert alert-danger' role='alert'>
+                    <span className='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+                    <span className='glyphicon-padding'>
+                        Sorry, there was a problem connecting to the Strava Bike Service server.  <a href='/'>Try again?</a>
+                    </span>
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <a href='#' onClick={this.requestAccess}>
+                        <img src='/img/btn_strava_connectwith_orange.png' alt='Connect with Strava' className='img-responsive center-block' />
+                    </a>
+                </div>
+            );
+        }
     }
 });
 
