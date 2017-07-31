@@ -57,7 +57,7 @@ var StravaBikeServiceWeb = React.createClass({
         var server = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:3000' : 'https://sbs-server.everylayer.io';
         $.ajax({
             type: 'post',
-            url: server + '/v1/code',
+            url: `${server}/v1/code`,
             data: JSON.stringify({code: code}),
             headers: { },
             contentType: 'application/json; charset=utf-8',
@@ -80,7 +80,7 @@ var StravaBikeServiceWeb = React.createClass({
             var server = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:3000' : 'https://sbs-server.everylayer.io';
             $.ajax({
                 type: 'get',
-                url: server + '/v1/athlete/'+ this.state.stravaData.athlete.id,
+                url: `${server}/v1/athlete/${this.state.stravaData.athlete.id}`,
                 headers: { },
                 contentType: 'application/json; charset=utf-8',
                 success: function(athlete) {
@@ -111,7 +111,7 @@ var StravaBikeServiceWeb = React.createClass({
             var server = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:3000' : 'https://sbs-server.everylayer.io';
             $.ajax({
                 type: 'post',
-                url: server + '/v1/ridetimes',
+                url: `${server}/v1/ridetimes`,
                 data: JSON.stringify(data),
                 headers: { },
                 contentType: 'application/json; charset=utf-8',

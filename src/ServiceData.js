@@ -16,6 +16,12 @@ var ServiceData = React.createClass({
         var s = Math.floor(d % 3600 % 60);
         return ((h > 0 ? h + ":" + (m < 10 ? "0" : "") : "") + m + ":" + (s < 10 ? "0" : "") + s);
     },
+    secondsToHm(d) {
+        d = Number(d);
+        var h = Math.floor(d / 3600);
+        var m = Math.floor(d % 3600 / 60);
+        return ((h > 0 ? h + ":" + (m < 10 ? '0' : '') : '') + m);
+    },
     getDefaultProps() {
         return {
             rides: [],
@@ -37,13 +43,30 @@ var ServiceData = React.createClass({
 
                 // weave in our info
                 bike.due = due;
-                bike.lastServiceFormatted = moment(bike.lastService * 1000).format('LL');
+
+                // if lastService is null, the user hasn't setup Strava correctly
+                // and everything will effectively be cumulative ride times
+                if (bike.lastService) {
+                    bike.lastServiceFormatted = moment(bike.lastService * 1000).format('LL');
+                } else {
+                    bike.lastServiceFormatted = (
+                        <span>
+                            <Label bsStyle='info'>
+                                <span className='glyphicon glyphicon-alert'></span>
+                            </Label>
+                            <span className='glyphicon-padding'>
+                                No "Last Service" date set in Strava gear note, see instructions
+                            </span>
+                        </span>
+                    );
+                }
+
                 bike.lastRideDateFormatted = moment(bike.lastRideDate).format('LLL');
 
-                bike.timeSince = self.secondsToHms(bike.minutes);
+                bike.timeSince = self.secondsToHm(bike.minutes);
 
-                var l = (left > 0 ? self.secondsToHms(left) : 'Overdue for service');
-                bike['timeUntil'] = l;
+                var l = (left > 0 ? self.secondsToHm(left) : 'Overdue for service');
+                bike.timeUntil = l;
 
                 var serviceLabel = (
                     <div>
@@ -107,14 +130,14 @@ var ServiceData = React.createClass({
                                 Ride Time
                             </dt>
                             <dd>
-                                {bike.timeSince}
+                                {bike.timeSince} { bike.lastService ? '' : (<span>(lifetime)</span> )}
                             </dd>
 
                             <dt>
                                 Remaining Time
                             </dt>
                             <dd>
-                                {bike.timeUntil}
+                                { bike.lastService ? bike.timeUntil : (<span>N/A</span> )}
                             </dd>
                         </dl>
                     </li>
