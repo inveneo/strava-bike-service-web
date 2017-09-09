@@ -38,7 +38,7 @@ var StravaBikeServiceWeb = React.createClass({
             code: null, // temporary access code, used to get full access_code
             stravaData: null, // includes access_token plus athlete data
             athlete: null, // detailed athelete info, used to be returned with the OAuth token exchange
-            rides: [], // bikes with ride time since last service pre-calculated
+            data: [], // array of bike and ride data
             serviceInterval: 30, // default, in hours
             error: null,
             loading: false
@@ -68,7 +68,6 @@ var StravaBikeServiceWeb = React.createClass({
                 });
             },
             error: function(err) {
-                console.log(err);
                 self.setState({error: err.responseText});
             }
         });
@@ -89,7 +88,7 @@ var StravaBikeServiceWeb = React.createClass({
                         loading: false
                     }, () => {
                         // now fetch ride detail
-                        self.getRides();
+                        self.getBikesAndRides();
                     })
                 },
                 error: function(err) {
@@ -99,7 +98,7 @@ var StravaBikeServiceWeb = React.createClass({
 
         });
     },
-    getRides() {
+    getBikesAndRides() {
         var self = this;
 
         var data = {
@@ -116,10 +115,16 @@ var StravaBikeServiceWeb = React.createClass({
                 headers: { },
                 contentType: 'application/json; charset=utf-8',
                 success: function(data) {
-                    self.setState({rides: data, loading: false})
+                    self.setState({
+                        data: data,
+                        loading: false
+                    });
                 },
                 error: function(err) {
-                    self.setState({error: err.responseText, loading: false});
+                    self.setState({
+                        error: err.responseText,
+                        loading: false
+                    });
                 }
             });
 
@@ -160,7 +165,7 @@ var StravaBikeServiceWeb = React.createClass({
                 <div className='loader'>Loading Strava data...</div>
             );
         } else {
-            if (this.state.rides && this.state.rides.length) {
+            if (this.state.data.length) {
                 serviceInterval =(
                     <ServiceInterval
                         active={this.state.serviceInterval}
@@ -169,7 +174,7 @@ var StravaBikeServiceWeb = React.createClass({
                 );
                 data = (
                     <ServiceData
-                        rides={this.state.rides}
+                        data={this.state.data}
                         serviceInterval={this.state.serviceInterval}
                     />
                 );

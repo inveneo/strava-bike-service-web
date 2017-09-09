@@ -2,6 +2,11 @@ import React from 'react';
 import { Label } from 'react-bootstrap';
 import _ from 'underscore';
 import moment from 'moment';
+require('moment-duration-format');
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 var ServiceData = React.createClass({
     getInitialState() {
@@ -24,50 +29,19 @@ var ServiceData = React.createClass({
     },
     getDefaultProps() {
         return {
-            rides: [],
+            data: [],
             serviceInterval: 30
         }
     },
     render() {
         var self = this;
         var bikes;
-        if (this.props.rides && this.props.rides.length) {
+
+        if (this.props.data.length) {
             // hours to minutes to seconds
-            var serviceInterval = self.props.serviceInterval * 60 * 60;
-            bikes = this.props.rides.map((bike, i) => {
-                // compute how much time is left
-                var left = serviceInterval - (bike.minutes / 60) * 60;
-
-                // boolean if service is due or not
-                var due = (bike.minutes >= serviceInterval) ? true : false;
-
-                // weave in our info
-                bike.due = due;
-
-                // if lastService is null, the user hasn't setup Strava correctly
-                // and everything will effectively be cumulative ride times
-                if (bike.lastService) {
-                    bike.lastServiceFormatted = moment(bike.lastService * 1000).format('LL');
-                } else {
-                    bike.lastServiceFormatted = (
-                        <span>
-                            <Label bsStyle='info'>
-                                <span className='glyphicon glyphicon-alert'></span>
-                            </Label>
-                            <span className='glyphicon-padding'>
-                                No "Last Service" date set in Strava gear note, see instructions
-                            </span>
-                        </span>
-                    );
-                }
-
-                bike.lastRideDateFormatted = moment(bike.lastRideDate).format('LLL');
-
-                bike.timeSince = self.secondsToHm(bike.minutes);
-
-                var l = (left > 0 ? self.secondsToHm(left) : 'Overdue for service');
-                bike.timeUntil = l;
-
+            var serviceIntervalMins = self.props.serviceInterval * 60;
+            bikes = this.props.data.map((item, i) => {
+                var textLabel = 'text-primary';
                 var serviceLabel = (
                     <div>
                         <Label bsStyle='success'>
@@ -79,8 +53,8 @@ var ServiceData = React.createClass({
                     </div>
                 );
 
-                var textLabel = 'text-primary';
-                if (due) {
+                if (item.bike.minutes > serviceIntervalMins) {
+                    textLabel = 'text-danger';
                     serviceLabel = (
                         <div>
                             <Label bsStyle='danger'>
@@ -91,53 +65,42 @@ var ServiceData = React.createClass({
                             </span>
                         </div>
                     );
-                    textLabel = 'text-danger';
                 }
 
+                var time = moment.duration(item.bike.minutes, 'minutes').format('h:mm');
                 return (
                     <li className='list-group-item' key={i}>
-                        <h2 className={textLabel}>{bike.name}</h2>
+                        <h2 className={textLabel}>{item.bike.name}</h2>
                         <dl className='dl-horizontal'>
+                            <dt>
+                                Last Ride
+                            </dt>
+                            <dd>
+                                <a href={item.last.url}>{item.last.name}</a>
+                            </dd>
+                            <dt>
+                                Last Ride
+                            </dt>
+                            <dd>
+                                {moment(item.last.date).format('LLL')}
+                            </dd>
+                            <dt>
+                                Last Service
+                            </dt>
+                            <dd>
+                                {moment(item.bike.lastService*1000).format('LL')}
+                            </dd>
+                            <dt>
+                                Ride Time
+                            </dt>
+                            <dd>
+                                {time} ({numberWithCommas(item.bike.minutes)} minutes)
+                            </dd>
                             <dt>
                                 Service Status
                             </dt>
                             <dd>
                                 {serviceLabel}
-                            </dd>
-
-                            <dt>
-                                Last Ride Date
-                            </dt>
-                            <dd>
-                                {bike.lastRideDateFormatted}
-                            </dd>
-
-                            <dt>
-                                Last Ride
-                            </dt>
-                            <dd>
-                                <a href={bike.lastRideUrl}>{bike.lastRide}</a>
-                            </dd>
-
-                            <dt>
-                                Last Service Date
-                            </dt>
-                            <dd>
-                                {bike.lastServiceFormatted}
-                            </dd>
-
-                            <dt>
-                                Ride Time
-                            </dt>
-                            <dd>
-                                {bike.timeSince} { bike.lastService ? '' : (<span>(lifetime)</span> )}
-                            </dd>
-
-                            <dt>
-                                Remaining Time
-                            </dt>
-                            <dd>
-                                { bike.lastService ? bike.timeUntil : (<span>N/A</span> )}
                             </dd>
                         </dl>
                     </li>
